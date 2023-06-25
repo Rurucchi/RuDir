@@ -31,7 +31,7 @@ async function displayDir(dir) {
     console.log(button.textContent);
     // check if element is a directory
     if (!element.match(/\.[0-9a-z]+$/i)) {
-      button.innerHTML += `<img src="./assets/folder.svg" width="20" height="20">`;
+      button.innerHTML += `<img src="assets/folder.svg" width="20" height="20">`;
     }
     dir_display.appendChild(button);
   });

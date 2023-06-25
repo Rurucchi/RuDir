@@ -1,6 +1,6 @@
-# Tauri + Vanilla
+# RuDir
 
-This template should help get you started developing with Tauri in vanilla HTML, CSS and Javascript.
+## _is a cross-platform file manager._
 
 ## Recommended IDE Setup
 
