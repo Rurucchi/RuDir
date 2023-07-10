@@ -5,6 +5,7 @@ let dir_display;
 
 // variables
 let dirList;
+let currentPath = "C:";
 let filter = "";
 
 // calls to backend
@@ -31,16 +32,22 @@ async function displayDir(dir, filter) {
 
   dirList.forEach((element) => {
     // console.log(element);
+
+    // creating the element
     const button = document.createElement("button");
     button.setAttribute("id", element.toString());
-    button.onclick = async function () {
-      await changeDir(element.toString());
-    };
     button.textContent = element;
-
-    console.log(button.textContent);
     // check if element is a directory
     if (!element.match(/\.[0-9a-z]+$/i)) {
+      button.onclick = async function () {
+        await changeDir(element.toString());
+        currentPath = currentPath + "/" + element.toString();
+        path_bar.value = currentPath;
+        console.log(currentPath);
+      };
+
+      // console.log(button.textContent);
+
       button.innerHTML += `<img src="assets/folder.svg" width="20" height="20">`;
     }
     dir_display.appendChild(button);
@@ -59,17 +66,24 @@ async function changeDir(inputPath, inputFilter) {
 window.addEventListener("DOMContentLoaded", async () => {
   changeDir(document.getElementById("path_bar").value);
 
-  // enter key handling
+  // first load!
   let path_bar = document.getElementById("path_bar");
+  let search_bar = document.getElementById("search_bar");
+  path_bar.value = currentPath;
+
+  // event handlers
   path_bar.addEventListener("keypress", function (event) {
+    // enter key handling
     if (event.key === "Enter") {
       event.preventDefault();
-      changeDir(path_bar.value);
+      currentPath = path_bar.value.toString();
+      changeDir(currentPath);
     }
   });
 
   // query handling
-  let search_bar = document.getElementById("search_bar");
+
+  // calls the function when input value changes
   search_bar.addEventListener("input", function (event) {
     changeDir(path_bar.value, search_bar.value);
   });
@@ -77,5 +91,10 @@ window.addEventListener("DOMContentLoaded", async () => {
   let back_button = document.getElementById("back_button");
   back_button.addEventListener("click", async function (event) {
     await changeDir("..", search_bar.value);
+
+    // update the path
+    let n = currentPath.lastIndexOf("/");
+    currentPath = currentPath.substring(0, n != -1 ? n : currentPath.length);
+    path_bar.value = currentPath;
   });
 });
